@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Presupuesto - Porta eCommerce 2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ================================================================ 
+           RESTAURACIÓN DE VARIABLES Y ESTILOS ORIGINALES
+           ================================================================ */
+        :root {
+            --lila-principal: #522883;
+            --purpura-medio: #72298d;
+            --purpura-oscuro: #3d1a52;
+            --naranja-base: #ee7b1c;
+            --naranja-rosado: #ed631d;
+            --beige-claro: #fdf1e9;
+            --texto-principal: #222222;
+            --texto-secundario: #6b6b6b;
+            --verde-check: #10B981;
+            --amber-400: #FBBF24;
+            --amber-500: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html, body { height: 100%; background-color: #ffffff; color: var(--texto-principal); line-height: 1.6; overflow: hidden; }
+        
+        .documento {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            flex-direction: column;
+            overflow: hidden;
+            background: white;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            display: none;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            display: flex;
+            z-index: 10;
+        }
+
+        /* HEADERS Y FOOTERS */
+        .slide-header {
+            background: linear-gradient(135deg, var(--purpura-oscuro) 0%, var(--lila-principal) 55%, var(--purpura-medio) 100%);
+            padding: 16px 55px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 70px;
+            box-shadow: 0 4px 15px rgba(82, 40, 131, 0.2);
+        }
+
+        .porta-logo-small { 
+            height: 40px;
+            transition: all 0.3s ease;
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        .porta-logo-small:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 5px 10px rgba(255,255,255,0.2));
+        }
+        
+        .slide-number { 
+            color: var(--naranja-base); 
+            font-weight: 700; 
+            font-size: 1.4em;
+            animation: slideInRight 0.6s ease-out;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .slide-number::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--amber-500);
+            transition: width 0.4s ease;
+        }
+        
+        .slide-header:hover .slide-number::after {
+            width: 100%;
+        }
+
+        .slide-footer {
+            background: var(--beige-claro);
+            padding: 12px 55px;
+            border-top: 3px solid var(--naranja-base);
+            font-size: 0.7em;
+            color: var(--texto-secundario);
+            text-align: center;
+            box-shadow: 0 -2px 10px rgba(82, 40, 131, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .slide-footer:hover {
+            background: linear-gradient(135deg, var(--beige-claro), rgba(238, 123, 28, 0.05));
+            border-top-color: var(--lila-principal);
+        }
+
+        .slide-content { flex: 1; padding: 30px 60px; display: flex; flex-direction: column; justify-content: center; }
+
+        /* TÍTULOS CON DEGRADADO */
+        .slide-title {
+            background: linear-gradient(135deg, var(--lila-principal) 0%, var(--purpura-medio) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.75em;
+            font-weight: 700;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 4px solid var(--naranja-base);
+            display: inline-block;
+        }
+
+        /* PORTADA ORIGINAL CON MEJORAS */
+        .cover-slide {
+            background: linear-gradient(135deg, #1c0730 0%, var(--purpura-oscuro) 25%, var(--lila-principal) 55%, var(--purpura-medio) 80%, #9b3fb8 100%) !important;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cover-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(238, 123, 28, 0.1) 0%, transparent 50%), 
+                        radial-gradient(circle at 80% 80%, rgba(82, 40, 131, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .cover-slide > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .amber-badge {
+            background: linear-gradient(135deg, var(--amber-400), var(--amber-500));
+            color: #78350F;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            display: inline-block;
+            text-transform: uppercase;
+            box-shadow: 0 8px 16px rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+            animation: slideInDown 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .amber-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+        
+        .amber-badge:hover {
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: 0 12px 24px rgba(245, 158, 11, 0.4);
+        }
+        
+        .amber-badge:hover::before {
+            left: 100%;
+        }
+
+        /* GRID Y CARDS CON HOVER */
+        .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .feature-module {
+            background: linear-gradient(135deg, rgba(82, 40, 131, 0.08) 0%, rgba(238, 123, 28, 0.06) 100%);
+            border-left: 4px solid var(--lila-principal);
+            padding: 20px;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out backwards;
+        }
+        
+        .feature-module::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .feature-module:hover::before {
+            left: 100%;
+        }
+
+        .feature-module:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(82, 40, 131, 0.2);
+            border-left-color: var(--naranja-base);
+            background: linear-gradient(135deg, rgba(82, 40, 131, 0.12) 0%, rgba(238, 123, 28, 0.1) 100%);
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .feature-module:nth-child(1) { animation-delay: 0.1s; }
+        .feature-module:nth-child(2) { animation-delay: 0.2s; }
+        .feature-module:nth-child(3) { animation-delay: 0.3s; }
+
+        /* BOX DE PRECIO DESTACADO */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--lila-principal), var(--purpura-medio));
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(238, 123, 28, 0.3);
+            animation: slideInUp 0.7s ease-out backwards;
+        }
+        
+        .highlight-box::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(238, 123, 28, 0.1) 0%, transparent 70%);
+            transition: all 0.6s ease;
+        }
+
+        .highlight-box:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(82, 40, 131, 0.3), 0 0 30px rgba(238, 123, 28, 0.2);
+            border-color: var(--naranja-base);
+        }
+        
+        .highlight-box:hover::after {
+            right: -20%;
+            top: -20%;
+        }
+        
+        .highlight-box:nth-child(1) { animation-delay: 0.3s; }
+        .highlight-box:nth-child(2) { animation-delay: 0.5s; }
+
+        /* DECORATIVOS CON ANIMACIONES */
+        .hero-decor { 
+            position: absolute; 
+            opacity: 0.15; 
+            pointer-events: none;
+            filter: drop-shadow(0 0 8px rgba(238, 123, 28, 0.3));
+            transition: all 0.3s ease;
+        }
+        
+        .hero-decor:hover {
+            opacity: 0.25;
+            filter: drop-shadow(0 0 15px rgba(238, 123, 28, 0.5));
+        }
+
+        /* CHECKS ANIMADOS */
+        .check {
+            width: 22px; height: 22px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            margin-right: 10px; font-size: 0.8em; font-weight: bold;
+            transition: all 0.3s ease;
+            animation: scaleIn 0.5s ease-out backwards;
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .check:hover {
+            transform: scale(1.3) rotate(15deg);
+        }
+        
+        .check.orange { 
+            background: linear-gradient(135deg, rgba(238, 123, 28, 0.2), rgba(245, 158, 11, 0.15));
+            color: var(--naranja-base);
+            box-shadow: 0 0 8px rgba(238, 123, 28, 0.3);
+        }
+        
+        li:nth-child(1) .check { animation-delay: 0.1s; }
+        li:nth-child(2) .check { animation-delay: 0.2s; }
+        li:nth-child(3) .check { animation-delay: 0.3s; }
+        li:nth-child(4) .check { animation-delay: 0.4s; }
+        li:nth-child(5) .check { animation-delay: 0.5s; }
+
+        /* ANIMACIONES DE ENTRADA Y DINAMISMO */
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes floatUp {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(238, 123, 28, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(238, 123, 28, 0.8); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        @keyframes rotate3d {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+        
+        .slide-content { animation: fadeInUp 0.8s ease-out forwards; }
+        .slide-header { animation: slideInDown 0.6s ease-out; }
+        
+        .slide-title {
+            animation: slideInLeft 0.8s ease-out 0.1s both;
+            transition: all 0.3s ease;
+        }
+        
+        .slide-title:hover {
+            transform: translateX(10px);
+            text-shadow: 0 5px 15px rgba(82, 40, 131, 0.2);
+        }
+        
+        /* MEJORAS ADICIONALES EN TEXTOS */
+        h4 {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-module:hover h4 {
+            color: var(--naranja-base);
+            transform: translateX(5px);
+        }
+        
+        /* ANIMACIÓN DE LISTAS */
+        ul.alcance-list li {
+            animation: slideInLeft 0.6s ease-out backwards;
+        }
+        
+        ul.alcance-list li:nth-child(1) { animation-delay: 0.1s; }
+        ul.alcance-list li:nth-child(2) { animation-delay: 0.2s; }
+        ul.alcance-list li:nth-child(3) { animation-delay: 0.3s; }
+        ul.alcance-list li:nth-child(4) { animation-delay: 0.4s; }
+        ul.alcance-list li:nth-child(5) { animation-delay: 0.5s; }
+        
+        /* EFECTO EN NÚMEROS Y PRECIOS */
+        h1, h2, h3 {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-module:hover h1,
+        .feature-module:hover h3 {
+            color: var(--naranja-base);
+        }
+        
+        /* EFECTOS DE TRANSICIÓN MEJORADOS */
+        .slide {
+            transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+    </style>
+</head>
+<body>
+
+<div class="documento">
+
+    <!-- SLIDE 00 - PORTADA -->
+    <div class="slide cover-slide active">
+        <svg class="hero-decor" style="top:35px;left:50px;width:70px; animation: floatUp 4s ease-in-out infinite;" viewBox="0 0 100 100"><path d="M50 0 L62 38 L100 50 L62 62 L50 100 L38 62 L0 50 L38 38 Z" fill="white"/></svg>
+        <svg class="hero-decor" style="bottom:70px;right:220px;width:55px; animation: floatUp 5s ease-in-out infinite 0.5s;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="white" stroke-width="3"/></svg>
+
+        <div style="max-width: 900px; padding: 0 40px;">
+            <img src="logotipo_blanco.png" alt="Porta" style="height:80px; margin-bottom: 20px; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); animation: floatUp 3s ease-in-out infinite; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1) rotate(5deg)'; this.style.filter='drop-shadow(0 20px 40px rgba(238, 123, 28, 0.5))';" onmouseout="this.style.transform='scale(1) rotate(0)'; this.style.filter='drop-shadow(0 15px 30px rgba(0,0,0,0.4))';">
+            <br>
+            <span class="amber-badge">Propuesta de Presupuesto</span>
+            <h1 style="font-size: 3em; color: white; margin: 20px 0; font-weight: 900; line-height: 1.1; animation: slideInDown 0.8s ease-out 0.1s both;">PORTA ECOMMERCE 2.0<br>PLATAFORMA COMPLETA DE TIENDA ONLINE</h1>
+            <p style="color: rgba(255,255,255,0.8); font-size: 1.1em; animation: slideInUp 0.8s ease-out 0.3s both;">Una solución integral diseñada para potenciar tu negocio con funcionalidades avanzadas, integraciones fluidas y tecnología de vanguardia que prepara tu tienda para crecer.</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 01 - FUNCIONALIDADES -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">01</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Funcionalidades Porta eCommerce 2.0</h2>
+            <p style="margin-bottom: 20px; color: var(--texto-secundario); font-size: 0.9em;">Plataforma completa con todas las funcionalidades que tu tienda necesita para crecer y convertir.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; align-items: start;">
+                
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.8em; margin-bottom: 12px;">🔌 API & Integraciones</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.92em; list-style: none;">
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Porta API 2.0 con integraciones nativas.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Posibilidades de desarrollo de Apps.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Integración de Proveedores.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Smart PortaLogin con Meta y Google.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Gestión de atributos de productos.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.8em; margin-bottom: 12px;">🛒 Compradores</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.92em; list-style: none;">
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Marketing Ready integrando Meta y Google.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Optimización SEO automática.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Carritos normales y especiales (bodas, etc).</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Carritos manuales 2.0 con afiliaciones.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>PortaCheckout en 3 pasos estandarizado.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.8em; margin-bottom: 12px;">⚡ Tecnología</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.92em; list-style: none;">
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>IA nativa de OpenAI para descripciones.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Conversiones en Meta y Google Analytics4.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Google Merchant integrado.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Marketplace Ready con API escalable.</li>
+                        <li style="margin-bottom: 8px;"><span class="check">✓</span>Velocidad y seguridad optimizadas.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Funcionalidades | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 02 - PROMOCIONES -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">02</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Entendemos de eCommerce - Promociones</h2>
+            <p style="margin-bottom: 15px; color: var(--texto-secundario); font-size: 0.9em;">Módulos completos de promociones y beneficios para incrementar tus ventas.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.6em; margin-bottom: 12px;">💰 Descuentos Flexibles</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.88em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Descuento porcentual y nominal por producto.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Descuento porcentual y nominal por restricciones.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Descuento porcentual y nominal por carrito.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Descuentos por métodos de pago.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Envío gratis condicionado.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Descuento porcentual en toda la tienda.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.6em; margin-bottom: 12px;">🎁 Promociones Avanzadas</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.88em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Cupones de descuento customizables.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>PortaCRM (cumpleaños y registro).</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Descuentos porcentuales progresivos.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>More For Less (2x1, 3x2, 4x3, etc).</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Regalos por compras.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>e-Gift Cards.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Promociones y Beneficios | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 03 - ADMINISTRACIÓN -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">03</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Entendemos de eCommerce - Administración</h2>
+            <p style="margin-bottom: 15px; color: var(--texto-secundario); font-size: 0.9em;">Panel de control completo para gestionar tu eCommerce de manera eficiente.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.6em; margin-bottom: 12px;">📊 Panel de Administración</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.88em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestor de Pedidos avanzado.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestión de Proveedores y Vendedores.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestión de banners y blogs.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Dashboard de ventas en tiempo real.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Análisis de carritos abandonados.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Carritos manuales.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.6em; margin-bottom: 12px;">🏪 Gestión de Catálogo</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.88em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestión de productos y categorías.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestión de marcas, colores, talles.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Palabras relacionadas y SEO.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestión de clientes y suscriptores.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Módulo de Combos de productos.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Módulo de e-Gift Card.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Panel de Administración | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 04 - CARRITO -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">04</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Entendemos de eCommerce - Carrito</h2>
+            <p style="margin-bottom: 15px; color: var(--texto-secundario); font-size: 0.9em;">Carrito de compras completo con múltiples opciones de pago y gestión avanzada.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.6em; margin-bottom: 12px;">💳 Métodos de Pago</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.88em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Bancard Vpos 2.0.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Zimple integrado.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Tigo Money.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Transferencia bancaria.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Pago en una sola acción.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Compras a crédito disponibles.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.6em; margin-bottom: 12px;">🛍️ Funcionalidades</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.88em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Carrito abandonado con retargeting.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Cálculo automático de envíos.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Compra como invitado.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestión de descuentos integrada.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Compras al contado rápidas.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Checkout en 3 pasos.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Carrito de Compras | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 05 - INTEGRACIONES -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">05</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Integraciones Fundamentales</h2>
+            <p style="margin-bottom: 20px; color: var(--texto-secundario); font-size: 0.9em;">Integraciones nativas que conectan tu tienda con los sistemas más importantes.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.5em; margin-bottom: 12px;">⚙️ Sistema ERP</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.85em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Lectura en tiempo real de productos.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Sincronización de precios.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Control de stock automático.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.5em; margin-bottom: 12px;">📦 Pedidos</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.85em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Automatización completa.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Escritura de pedidos.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Confirmación inmediata.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.5em; margin-bottom: 12px;">🚚 Logística</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.85em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>AEX para delivery nacional.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Solución integral de envíos.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Tracking en tiempo real.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-module" style="height: 100%;">
+                    <h4 style="font-size: 1.5em; margin-bottom: 12px;">📍 Delivery Propio</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.85em; list-style: none;">
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Base de ciudades configurable.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Costo de envío personalizado.</li>
+                        <li style="margin-bottom: 6px;"><span class="check">✓</span>Gestión descentralizada.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Integraciones | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 06 - BASIC -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">06</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Porta eCommerce 2.0 - Basic</h2>
+            <p style="margin-bottom: 15px; color: var(--texto-secundario); font-size: 0.9em;">Paquete fundamental con todas las características esenciales para tu tienda online.</p>
+            
+            <div style="display: grid; grid-template-rows: auto 1fr; gap: 20px;">
+                <div class="feature-module">
+                    <h4 style="font-size: 1.4em; margin-bottom: 12px;">📋 Características Incluidas</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.82em; list-style: none;">
+                        <li style="margin-bottom: 4px;"><span class="check">1.</span>Diseño y Look And Feel personalizado.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">2.</span>Conectividad con ERP para productos.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">3.</span>Panel de administración completo.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">4.</span>Smart Login, Mi cuenta, Favoritos.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">5.</span>Catálogo con filtros y buscador.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">6.</span>Carrusel de productos destacados.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">7.</span>IA orientado a eCommerce*.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">8.</span>Banners, pop-up, sucursales.</li>
+                    </ul>
+                </div>
+                <div class="feature-module">
+                    <h4 style="font-size: 1.1em; margin-bottom: 10px;">Características (continuación)</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.82em; list-style: none;">
+                        <li style="margin-bottom: 4px;"><span class="check">9.</span>Formulario de contacto.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">10.</span>Carrito en 3 pasos integrado.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">11.</span>Métodos de pago múltiples.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">12.</span>Carrito manual y abandonado.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">13.</span>Descuentos porcentuales.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">14.</span>Dashboard de Ventas.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">15.</span>Usuarios y newsletters.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">16.</span>Pixel Meta y Google Analytics.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">porta. | eCommerce Basic | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 07 - BASIC INVERSIÓN -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">07</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Inversión</h2>
+            <p style="margin-bottom: 20px; color: var(--texto-secundario); font-size: 0.9em;">Porta eCommerce 2.0 - Basic</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 25px; max-width: 600px; margin: 0 auto;">
+                <div class="highlight-box" style="animation: slideInUp 0.8s ease-out 0.3s both;">
+                    <h3 style="font-size: 0.95em; text-transform: uppercase; transition: all 0.3s ease;">Pago Contado</h3>
+                    <div style="font-size: 2.8em; font-weight: 800; margin: 15px 0; color: var(--amber-400);">Gs. 47.800.000</div>
+                    <p style="font-size: 0.85em; opacity: 0.9;">50% entrega - 50% finalización<br><strong>IVA INCLUIDO</strong></p>
+                </div>
+                <div class="highlight-box" style="animation: slideInUp 0.8s ease-out 0.4s both;">
+                    <h3 style="font-size: 0.95em; text-transform: uppercase;">Financiado 12 Cuotas</h3>
+                    <div style="font-size: 2.8em; font-weight: 800; margin: 15px 0; color: var(--amber-400);">Gs. 3.984.000</div>
+                    <p style="font-size: 0.85em; opacity: 0.9;">Por mes<br><strong>IVA INCLUIDO</strong></p>
+                </div>
+                <div style="background: rgba(238, 123, 28, 0.1); border: 2px solid var(--naranja-base); border-radius: 12px; padding: 15px; text-align: center; font-size: 0.85em; color: var(--texto-principal); animation: slideInUp 0.6s ease-out 0.5s both;">
+                    <strong>⏱️ Plazo:</strong> 90 días hábiles<br>
+                    <small>desde aprobación de propuesta</small>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">porta. | eCommerce Basic - Inversión | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 08 - FULL -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">08</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Porta eCommerce 2.0 - Full</h2>
+            <p style="margin-bottom: 15px; color: var(--texto-secundario); font-size: 0.9em;">Paquete completo con funcionalidades avanzadas y todas nuestras integraciones más poderosas.</p>
+            
+            <div style="display: grid; grid-template-rows: auto 1fr; gap: 20px;">
+                <div class="feature-module">
+                    <h4 style="font-size: 1.4em; margin-bottom: 12px;">✨ Incluye Basic + Extra</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.82em; list-style: none;">
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Tigo Money integrado.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>QR API de Bancard.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Descuentos por métodos de pago.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Descuentos progresivos.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>More For Less (promociones).</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Delivery sin costo.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Regalos por compras.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Cupones de descuento avanzados.</li>
+                    </ul>
+                </div>
+                <div class="feature-module">
+                    <h4 style="font-size: 1.1em; margin-bottom: 10px;">+ Integraciones Avanzadas</h4>
+                    <ul class="alcance-list" style="display: block; font-size: 0.82em; list-style: none;">
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Google Analytics vía API.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Meta Conversions API.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Archivos para catálogos Meta.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Google Merchant integrado.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Manychat para WhatsApp.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>e-Gift Card completo.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Módulo de Combos.</li>
+                        <li style="margin-bottom: 4px;"><span class="check">✓</span>Escritura de pedidos ERP.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">porta. | eCommerce Full | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 09 - FULL INVERSIÓN -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">09</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Inversión</h2>
+            <p style="margin-bottom: 20px; color: var(--texto-secundario); font-size: 0.9em;">Porta eCommerce 2.0 - Full</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 25px; max-width: 600px; margin: 0 auto;">
+                <div class="highlight-box" style="animation: slideInUp 0.8s ease-out 0.3s both;">
+                    <h3 style="font-size: 0.95em; text-transform: uppercase; transition: all 0.3s ease;">Pago Contado</h3>
+                    <div style="font-size: 2.8em; font-weight: 800; margin: 15px 0; color: var(--amber-400);">Gs. 73.000.000</div>
+                    <p style="font-size: 0.85em; opacity: 0.9;">50% entrega - 50% finalización<br><strong>IVA INCLUIDO</strong></p>
+                </div>
+                <div class="highlight-box" style="animation: slideInUp 0.8s ease-out 0.4s both;">
+                    <h3 style="font-size: 0.95em; text-transform: uppercase;">Financiado 12 Cuotas</h3>
+                    <div style="font-size: 2.8em; font-weight: 800; margin: 15px 0; color: var(--amber-400);">Gs. 6.083.000</div>
+                    <p style="font-size: 0.85em; opacity: 0.9;">Por mes<br><strong>IVA INCLUIDO</strong></p>
+                </div>
+                <div style="background: rgba(238, 123, 28, 0.1); border: 2px solid var(--naranja-base); border-radius: 12px; padding: 15px; text-align: center; font-size: 0.85em; color: var(--texto-principal); animation: slideInUp 0.6s ease-out 0.5s both;">
+                    <strong>⏱️ Plazo:</strong> 120 días hábiles<br>
+                    <small>desde aprobación de propuesta</small>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">porta. | eCommerce Full - Inversión | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 10 - SERVICIOS COMPLEMENTARIOS -->
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">10</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Servicios Complementarios</h2>
+            <p style="margin-bottom: 20px; color: var(--texto-secundario); font-size: 0.9em;">Servicios adicionales para garantizar el funcionamiento y crecimiento de tu tienda.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                
+                <div class="highlight-box" style="animation: slideInUp 0.7s ease-out 0.2s both; padding: 25px;">
+                    <h3 style="font-size: 1.1em; text-transform: uppercase; margin-bottom: 15px;">🖥️ Hosting Web Dedicado</h3>
+                    <ul style="list-style: none; text-align: left; font-size: 0.9em;">
+                        <li style="margin-bottom: 8px;">▪ 4 CPU, 8GB RAM, 200GB Almacenamiento</li>
+                        <li style="margin-bottom: 8px;">▪ Firewall incluido</li>
+                        <li style="margin-bottom: 8px;">▪ Conectividad dedicada VPN</li>
+                        <li style="margin-bottom: 8px;">▪ Soporte técnico 24/7</li>
+                        <li style="margin: 15px 0; padding-top: 15px; border-top: 2px solid rgba(255,255,255,0.3); font-size: 1.1em;"><strong>Gs. 660.000</strong><br><small style="opacity: 0.8;">Mensual - IVA INCLUIDO</small></li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box" style="animation: slideInUp 0.7s ease-out 0.3s both; padding: 25px;">
+                    <h3 style="font-size: 1.1em; text-transform: uppercase; margin-bottom: 15px;">🔧 Soporte y Mantenimiento</h3>
+                    <div style="text-align: left; font-size: 0.9em;">
+                        <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.3);">
+                            <strong>Paquete Base (5 horas):</strong>
+                            <div style="font-size: 0.85em; opacity: 0.9; margin-top: 4px;">Gs. 575.000 Mensual</div>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <small style="opacity: 0.8;">De lunes a viernes<br>8:00-12:00hs / 13:00-17:00hs</small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="feature-module" style="margin-top: 20px; animation: slideInUp 0.7s ease-out 0.4s both;">
+                <h4 style="font-size: 1.2em; margin-bottom: 12px;">📦 Opciones de Soporte Ampliado</h4>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; font-size: 0.85em;">
+                    <div style="background: rgba(238, 123, 28, 0.15); padding: 12px; border-radius: 8px; text-align: center;">
+                        <strong>5 horas</strong><br>
+                        <div style="font-size: 1.1em; margin: 8px 0; color: var(--naranja-base);">Gs. 660.000</div>
+                    </div>
+                    <div style="background: rgba(238, 123, 28, 0.15); padding: 12px; border-radius: 8px; text-align: center;">
+                        <strong>20 horas</strong><br>
+                        <div style="font-size: 1.1em; margin: 8px 0; color: var(--naranja-base);">Gs. 2.376.000</div>
+                    </div>
+                    <div style="background: rgba(238, 123, 28, 0.15); padding: 12px; border-radius: 8px; text-align: center;">
+                        <strong>40 horas</strong><br>
+                        <div style="font-size: 1.1em; margin: 8px 0; color: var(--naranja-base);">Gs. 4.488.000</div>
+                    </div>
+                    <div style="background: rgba(238, 123, 28, 0.15); padding: 12px; border-radius: 8px; text-align: center;">
+                        <strong>60 horas</strong><br>
+                        <div style="font-size: 1.1em; margin: 8px 0; color: var(--naranja-base);">Gs. 6.732.000</div>
+                    </div>
+                    <div style="background: rgba(238, 123, 28, 0.15); padding: 12px; border-radius: 8px; text-align: center;">
+                        <strong>80 horas</strong><br>
+                        <div style="font-size: 1.1em; margin: 8px 0; color: var(--naranja-base);">Gs. 8.448.000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Servicios Complementarios | porta.com.py</div>
+    </div>
+
+    <!-- SLIDE 11 - CIERRE -->
+    <div class="slide cover-slide">
+        <div style="animation: fadeInUp 1s ease-out; position: relative; z-index: 2;">
+            <h1 style="font-size: 3.5em; color: white; margin-bottom: 15px; font-weight: 900; line-height: 1.1; animation: slideInDown 0.8s ease-out;" >Tu Tienda Online<br>Merece lo Mejor</h1>
+            <p style="margin: 25px 0 40px; color: rgba(255,255,255,0.85); font-size: 1.05em; animation: slideInUp 0.8s ease-out 0.2s both;">Implementa Porta eCommerce 2.0 y transforma tu negocio con tecnología de punta, marketing integrado y soporte profesional.</p>
+            <div style="background: white; color: var(--lila-principal); padding: 18px 50px; border-radius: 50px; font-weight: 800; display: inline-block; animation: slideInUp 0.8s ease-out 0.4s both; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer;" onmouseover="this.style.transform='scale(1.08) translateY(-3px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)';">
+                Contáctanos para Comenzar
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px;">
+    <button id="btn-prev" style="width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, rgba(82, 40, 131, 0.9), rgba(114, 41, 141, 0.9)); color:white; cursor:pointer; font-size:1.5em; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 4px 15px rgba(82, 40, 131, 0.3); font-weight: bold;" onmouseover="this.style.transform='scale(1.1) translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(82, 40, 131, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(82, 40, 131, 0.3)';">&#8249;</button>
+    <button id="btn-next" style="width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, rgba(238, 123, 28, 0.9), rgba(245, 158, 11, 0.9)); color:white; cursor:pointer; font-size:1.5em; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 4px 15px rgba(238, 123, 28, 0.3); font-weight: bold;" onmouseover="this.style.transform='scale(1.1) translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(238, 123, 28, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(238, 123, 28, 0.3)';">&#8250;</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        let isTransitioning = false;
+
+        function showSlide(index) {
+            if (isTransitioning) return;
+            
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            
+            if (index === currentSlide) return;
+            
+            isTransitioning = true;
+            
+            // Remover clase active del slide anterior
+            slides[currentSlide].classList.remove('active');
+            
+            // Pequeño delay para que la transición CSS funcione
+            setTimeout(() => {
+                // Agregar clase active al nuevo slide
+                slides[index].classList.add('active');
+                currentSlide = index;
+                
+                // Permitir siguiente transición después de que termine la actual
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 600);
+            }, 50);
+        }
+
+        // Event listeners para botones
+        document.getElementById('btn-prev').addEventListener('click', () => showSlide(currentSlide - 1));
+        document.getElementById('btn-next').addEventListener('click', () => showSlide(currentSlide + 1));
+        
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
+            if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+        });
+
+        // Efecto Parallax mejorado
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 20;
+            const y = (e.clientY / window.innerHeight) * 20;
+            document.querySelectorAll('.hero-decor').forEach((d, index) => {
+                const speed = 1 + (index * 0.5);
+                d.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+
+        // Mostrar primer slide
+        slides[0].classList.add('active');
+    });
+</script>
+</body>
+
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">01</span>
+        </div>
+        <div class="slide-content">
+    <h2 class="slide-title">Alcance del Proyecto</h2>
+    <p style="margin-bottom: 20px; color: var(--texto-secundario); font-size: 0.9em;">Soluciones integrales a medida bajo estándares de calidad Porta.</p>
+    
+    <div class="three-columns" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; align-items: start;">
+        
+        <div class="feature-module" style="height: 100%;">
+            <h4 style="font-size: 1.9em; margin-bottom: 12px;">📊 A medida 100%</h4>
+            <ul class="alcance-list" style="display: block; font-size: 0.92em; list-style: none;">
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Desarrollo de catálogo web personalizado para exposición de productos.</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Plataforma desarrollada con tecnologías modernas y escalables.</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Utilizamos PHP, Framework Laravel, Vue.js, MySQL, CSS y Javascript.</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>No utilizamos motores pre desarrollados, lo que permite mayor flexibilidad y escalabilidad del proyecto.</li>
+            </ul>
+        </div>
+
+        <div class="feature-module" style="height: 100%;">
+            <h4 style="font-size: 1.9em; margin-bottom: 12px;">🎨 Diseño moderno y experiencia de usuario</h4>
+            <ul class="alcance-list" style="display: block; font-size: 0.92em; list-style: none;">
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Look & Feel personalizado alineado a la identidad visual de la marca.</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Diseño responsive y mobile first, optimizado para todos los dispositivos.</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Componentes visuales modernos como carruseles de productos destacados.</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Diseño basado en arquitectura de información y buenas prácticas de UX.</li>
+            </ul>
+        </div>
+
+        <div class="feature-module" style="height: 100%;">
+            <h4 style="font-size: 1.9em; margin-bottom: 12px;">🧩 Estructura del sitio</h4>
+            <ul class="alcance-list" style="display: block; font-size: 0.92em; list-style: none;">
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Página institucional (ej. quiénes somos, información corporativa, sucursales o bocas de cobranza).</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Página de contacto con formularios integrados.</li>
+                <li style="margin-bottom: 6px;"><span class="check">✓</span>Formularios estratégicos como Call to Action (CTA) para generación de consultas o leads.</li>
+            </ul>
+        </div>
+
+    </div>
+        </div>
+        <div class="slide-footer">porta. | Alcance Detallado del Proyecto | porta.com.py</div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">02</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Inversión y Facilidades</h2>
+            <p style="margin-bottom: 20px; color: var(--texto-secundario); font-size: 0.9em;">El proyecto incluye el servicio de hosting y certificado de seguridad SSL (Let’s Encrypt) sin costo durante el primer año. Esta propuesta no contempla integraciones con sistemas ERP, pasarelas de pago ni APIs de logística, así como tampoco la entrega del código fuente del desarrollo ni la provisión de servicios de correos electrónicos corporativos.</p>
+            <div class="two-columns" style="margin-top: 20px;">
+                <div class="highlight-box" style="animation: slideInLeft 0.8s ease-out 0.3s both;">
+                    <h3 style="font-size: 1em; text-transform: uppercase; transition: all 0.3s ease;">Pago Contado</h3>
+                    <div style="font-size: 2.8em; font-weight: 800; margin: 15px 0; color: var(--amber-400);">Gs. 19.248.000.</div>
+                    <p style="font-size: 0.85em; opacity: 0.9;">50% de entrega - 50% al finalizar el desarrollo IVA INCLUIDO</p>
+                </div>
+                <div style="background: rgba(82, 40, 131, 0.03); border: 2px dashed var(--lila-principal); border-radius: 12px; padding: 30px; text-align: center; animation: slideInRight 0.8s ease-out 0.3s both; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--naranja-base)'; this.style.background='rgba(238, 123, 28, 0.05)'; this.style.transform='scale(1.02)';" onmouseout="this.style.borderColor='var(--lila-principal)'; this.style.background='rgba(82, 40, 131, 0.03)'; this.style.transform='scale(1)';">
+                    <h3 style="color: var(--lila-principal); font-size: 1em;">PLAN FINANCIADO</h3>
+                    <div style="font-size: 2.2em; font-weight: 800; color: var(--naranja-base); margin: 15px 0;">10 x gs 1.924.800.</div>
+                    <p style="font-size: 0.8em; color: var(--texto-secundario);"><Param></Param>rimer abono tras contratación - CUOTAS CORRIDAS. IVA INCLUIDo</p>
+                </div>
+            </div>
+            <div style="margin-top: 30px; text-align: center; font-size: 0.9em; color: var(--texto-secundario);">
+                Tiempo de puesta en marcha: 60 días hábiles de trabajo desde la fecha de indicada por el equipo de proyectos. No se incluyen gestiones externas como cargas de productos o mantenimientos de los mismos, o cualquier otro alcance no especificado en la propuesta puntualmente. Se requiere de manual de identidad de marca y de materiales originales de lineamientos de marca o campañas a implementar (KV).</strong>
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Propuesta Económica | porta.com.py</div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-header">
+            <img src="logotipo_blanco.png" class="porta-logo-small">
+            <span class="slide-number">03</span>
+        </div>
+        <div class="slide-content">
+            <h2 class="slide-title">Tiempo y Escalabilidad</h2>
+            
+            <!-- Timeline Horizontal -->
+            <!-- Primera fila: Fases 1 y 2 (Centradas) -->
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; position: relative; max-width: 800px; margin: 0 auto;">
+                <!-- Línea conectora horizontal superior (Fases 1-2) -->
+                <!-- FASE 1 -->
+                <div style="animation: slideInUp 0.8s ease-out 0.5s both; position: relative;">
+                    <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; background: linear-gradient(135deg, var(--lila-principal), var(--purpura-medio)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.85em; box-shadow: 0 4px 12px rgba(82, 40, 131, 0.4); transition: all 0.3s ease; z-index: 2; border: 3px solid white;" onmouseover="this.style.transform='translateX(-50%) scale(1.3)'; this.style.boxShadow='0 6px 18px rgba(82, 40, 131, 0.5)';" onmouseout="this.style.transform='translateX(-50%) scale(1)'; this.style.boxShadow='0 4px 12px rgba(82, 40, 131, 0.4)';">1</div>
+                    <div style="background: linear-gradient(135deg, rgba(82, 40, 131, 0.08), rgba(114, 41, 141, 0.05)); border-top: 3px solid var(--lila-principal); border-radius: 10px; padding: 60px 25px 25px; transition: all 0.3s ease; cursor: pointer; margin-top: 55px;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(82, 40, 131, 0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        <h4 style="font-size: 1.25em; color: var(--lila-principal); margin-bottom: 8px; font-weight: 700;">Diseño Web</h4>
+                        <p style="font-size: 0.95em; color: var(--texto-secundario); margin-bottom: 12px; line-height: 1.2;">Elaboración de demo del proyecto en HTML para look and feel y estructura de información.</p>
+                        <div style="display: inline-block; background: linear-gradient(135deg, var(--lila-principal), var(--purpura-medio)); color: white; padding: 4px 10px; border-radius: 5px; font-size: 0.8em; font-weight: 700;">📅 15 días hábiles</div>
+                    </div>
+                </div>
+
+                <!-- FASE 2 -->
+                <div style="animation: slideInUp 0.8s ease-out 0.6s both; position: relative;">
+                    <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; background: linear-gradient(135deg, var(--purpura-medio), var(--lila-principal)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.85em; box-shadow: 0 4px 12px rgba(114, 41, 141, 0.4); transition: all 0.3s ease; z-index: 2; border: 3px solid white;" onmouseover="this.style.transform='translateX(-50%) scale(1.3)'; this.style.boxShadow='0 6px 18px rgba(114, 41, 141, 0.5)';" onmouseout="this.style.transform='translateX(-50%) scale(1)'; this.style.boxShadow='0 4px 12px rgba(114, 41, 141, 0.4)';">2</div>
+                    <div style="background: linear-gradient(135deg, rgba(114, 41, 141, 0.08), rgba(82, 40, 131, 0.05)); border-top: 3px solid var(--purpura-medio); border-radius: 10px; padding: 60px 25px 25px; transition: all 0.3s ease; cursor: pointer; margin-top: 55px;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(114, 41, 141, 0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        <h4 style="font-size: 1.25em; color: var(--lila-principal); margin-bottom: 8px; font-weight: 700;">Modificaciones</h4>
+                        <p style="font-size: 0.95em; color: var(--texto-secundario); margin-bottom: 12px; line-height: 1.2;">Aquí nos das el feedback y nos pedís los ajustes que desees. Se pueden hacer hasta 2 tandas de modificaciones.</p>
+                        <div style="display: inline-block; background: linear-gradient(135deg, var(--purpura-medio), var(--lila-principal)); color: white; padding: 4px 10px; border-radius: 5px; font-size: 0.8em; font-weight: 700;">⚡ 5 días hábiles</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salto entre filas -->
+            <br>
+
+            <!-- Segunda fila: Fases 3, 4 y 5 (Centradas) -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; position: relative; max-width: 900px; margin: 20px auto 0;">
+                <!-- FASE 3 -->
+                <div style="animation: slideInUp 0.8s ease-out 0.7s both; position: relative;">
+                    <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; background: linear-gradient(135deg, var(--lila-principal), var(--purpura-medio)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.85em; box-shadow: 0 4px 12px rgba(82, 40, 131, 0.4); transition: all 0.3s ease; z-index: 2; border: 3px solid white;" onmouseover="this.style.transform='translateX(-50%) scale(1.3)'; this.style.boxShadow='0 6px 18px rgba(82, 40, 131, 0.5)';" onmouseout="this.style.transform='translateX(-50%) scale(1)'; this.style.boxShadow='0 4px 12px rgba(82, 40, 131, 0.4)';">3</div>
+                    <div style="background: linear-gradient(135deg, rgba(82, 40, 131, 0.08), rgba(114, 41, 141, 0.05)); border-top: 3px solid var(--lila-principal); border-radius: 10px; padding: 60px 25px 25px; transition: all 0.3s ease; cursor: pointer; margin-top: 55px;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(82, 40, 131, 0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        <h4 style="font-size: 1.25em; color: var(--lila-principal); margin-bottom: 8px; font-weight: 700;">Front y Panel</h4>
+                        <p style="font-size: 0.95em; color: var(--texto-secundario); margin-bottom: 12px; line-height: 1.2;">Elaboramos el panel de administracion y todo el dinámismo que tendrá tu landing page.</p>
+                        <div style="display: inline-block; background: linear-gradient(135deg, var(--lila-principal), var(--purpura-medio)); color: white; padding: 4px 10px; border-radius: 5px; font-size: 0.8em; font-weight: 700;">💻 15 días hábiles</div>
+                    </div>
+                </div>
+
+                <!-- FASE 4 -->
+                <div style="animation: slideInUp 0.8s ease-out 0.8s both; position: relative;">
+                    <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; background: linear-gradient(135deg, var(--purpura-medio), var(--lila-principal)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.85em; box-shadow: 0 4px 12px rgba(114, 41, 141, 0.4); transition: all 0.3s ease; z-index: 2; border: 3px solid white;" onmouseover="this.style.transform='translateX(-50%) scale(1.3)'; this.style.boxShadow='0 6px 18px rgba(114, 41, 141, 0.5)';" onmouseout="this.style.transform='translateX(-50%) scale(1)'; this.style.boxShadow='0 4px 12px rgba(114, 41, 141, 0.4)';">4</div>
+                    <div style="background: linear-gradient(135deg, rgba(114, 41, 141, 0.08), rgba(82, 40, 131, 0.05)); border-top: 3px solid var(--purpura-medio); border-radius: 10px; padding: 60px 25px 25px; transition: all 0.3s ease; cursor: pointer; margin-top: 55px;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(114, 41, 141, 0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        <h4 style="font-size: 1.25em; color: var(--lila-principal); margin-bottom: 8px; font-weight: 700;">Ajustes Finales</h4>
+                        <p style="font-size: 0.95em; color: var(--texto-secundario); margin-bottom: 12px; line-height: 1.2;">Aquí nos das el feedback y nos pedís los ajustes finales que desees para encaminar la puesta en marcha.</p>
+                        <div style="display: inline-block; background: linear-gradient(135deg, var(--purpura-medio), var(--lila-principal)); color: white; padding: 4px 10px; border-radius: 5px; font-size: 0.8em; font-weight: 700;">🔧 5 días hábiles</div>
+                    </div>
+                </div>
+
+                <!-- FASE 5 -->
+                <div style="animation: slideInUp 0.8s ease-out 0.9s both; position: relative;">
+                    <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; background: linear-gradient(135deg, var(--lila-principal), var(--purpura-medio)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.85em; box-shadow: 0 4px 12px rgba(82, 40, 131, 0.4); transition: all 0.3s ease; z-index: 2; border: 3px solid white;" onmouseover="this.style.transform='translateX(-50%) scale(1.3)'; this.style.boxShadow='0 6px 18px rgba(82, 40, 131, 0.5)';" onmouseout="this.style.transform='translateX(-50%) scale(1)'; this.style.boxShadow='0 4px 12px rgba(82, 40, 131, 0.4)';">5</div>
+                    <div style="background: linear-gradient(135deg, rgba(82, 40, 131, 0.12), rgba(114, 41, 141, 0.1)); border-top: 3px solid var(--lila-principal); border-radius: 10px; padding: 60px 25px 25px; transition: all 0.3s ease; cursor: pointer; margin-top: 55px;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(82, 40, 131, 0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        <h4 style="font-size: 1.25em; color: var(--lila-principal); margin-bottom: 8px; font-weight: 700;">Puesta en Línea</h4>
+                        <p style="font-size: 0.95em; color: var(--texto-secundario); margin-bottom: 12px; line-height: 1.2;">Ya solo queda poner en línea la web!</p>
+                        <div style="display: inline-block; background: linear-gradient(135deg, var(--lila-principal), var(--purpura-medio)); color: white; padding: 4px 10px; border-radius: 5px; font-size: 0.8em; font-weight: 700;">🚀 ¡GO!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 30px; padding: 20px; animation: slideInUp 0.6s ease-out 0.5s both;">
+                <p style="font-size: 0.9em; margin: 0;">"Mi función es asegurar que cada uno de estos puntos se cumpla con excelencia técnica y estratégica." — <strong>Luz</strong></p>
+            </div>
+        </div>
+        <div class="slide-footer">porta. | Tiempos de Entrega | porta.com.py</div>
+    </div>
+
+    <div class="slide cover-slide">
+        <div style="animation: fadeInUp 1s ease-out; position: relative; z-index: 2;">
+            <h1 style="font-size: 4em; color: white; margin-bottom: 10px; font-weight: 900; line-height: 1.1; animation: slideInDown 0.8s ease-out;" >Vamos Juntos</h1>
+            <p style="margin: 20px 0; color: rgba(255,255,255,0.9); font-size: 1.15em; animation: slideInUp 0.8s ease-out 0.2s both;">Reinventemos tu negocio con un catálogo que venda.</p>
+            <div style="background: white; color: var(--lila-principal); padding: 18px 50px; border-radius: 50px; font-weight: 800; display: inline-block; animation: slideInUp 0.8s ease-out 0.4s both; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer;" onmouseover="this.style.transform='scale(1.08) translateY(-3px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)';">
+                Luz Ohinggins - CX Manager
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px;">
+    <button id="btn-prev" style="width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, rgba(82, 40, 131, 0.9), rgba(114, 41, 141, 0.9)); color:white; cursor:pointer; font-size:1.5em; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 4px 15px rgba(82, 40, 131, 0.3); font-weight: bold;" onmouseover="this.style.transform='scale(1.1) translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(82, 40, 131, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(82, 40, 131, 0.3)';">&#8249;</button>
+    <button id="btn-next" style="width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, rgba(238, 123, 28, 0.9), rgba(245, 158, 11, 0.9)); color:white; cursor:pointer; font-size:1.5em; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 4px 15px rgba(238, 123, 28, 0.3); font-weight: bold;" onmouseover="this.style.transform='scale(1.1) translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(238, 123, 28, 0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(238, 123, 28, 0.3)';">&#8250;</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        let isTransitioning = false;
+
+        function showSlide(index) {
+            if (isTransitioning) return;
+            
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            
+            if (index === currentSlide) return;
+            
+            isTransitioning = true;
+            
+            // Remover clase active del slide anterior
+            slides[currentSlide].classList.remove('active');
+            
+            // Pequeño delay para que la transición CSS funcione
+            setTimeout(() => {
+                // Agregar clase active al nuevo slide
+                slides[index].classList.add('active');
+                currentSlide = index;
+                
+                // Permitir siguiente transición después de que termine la actual
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 600);
+            }, 50);
+        }
+
+        // Event listeners para botones
+        document.getElementById('btn-prev').addEventListener('click', () => showSlide(currentSlide - 1));
+        document.getElementById('btn-next').addEventListener('click', () => showSlide(currentSlide + 1));
+        
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
+            if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+        });
+
+        // Efecto Parallax mejorado
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 20;
+            const y = (e.clientY / window.innerHeight) * 20;
+            document.querySelectorAll('.hero-decor').forEach((d, index) => {
+                const speed = 1 + (index * 0.5);
+                d.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+
+        // Mostrar primer slide
+        slides[0].classList.add('active');
+    });
+</script>
+</body>
+</html>
